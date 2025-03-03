@@ -1,10 +1,9 @@
 package e1;
 
-public class SilverBankAccount implements BankAccount {
+public class BankAccountDecorator implements BankAccount {
+    protected final BankAccount base;
 
-    private final BankAccount base;
-
-    public SilverBankAccount(BankAccount base) {
+    public BankAccountDecorator(BankAccount base) {
         this.base = base;
     }
 
@@ -20,9 +19,6 @@ public class SilverBankAccount implements BankAccount {
 
     @Override
     public void withdraw(int amount) {
-        if (this.getBalance() < amount){
-            throw new IllegalStateException();
-        }
-        base.withdraw(amount + 1);
+        base.withdraw(amount);
     }
 }
