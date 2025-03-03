@@ -12,7 +12,7 @@ public class BankAccountTest {
 
     @BeforeEach
     void init(){
-        this.account = new BankAccount();
+        this.account = new SilverBankAccount(new CoreBankAccount());
     }
 
     @Test
