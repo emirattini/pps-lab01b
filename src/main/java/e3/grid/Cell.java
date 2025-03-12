@@ -1,4 +1,7 @@
 package e3;
+import e3.Pair;
+
+import java.util.Objects;
 
 public class Cell {
 
@@ -18,11 +21,26 @@ public class Cell {
                 && position.getY() <= cell.getY() + 1;
     }
 
+    public Pair<Integer, Integer> getPosition() {
+        return position;
+    }
+
     public int getX() {
         return position.getX();
     }
 
     public int getY() {
         return position.getY();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Cell
+                && position.equals(((Cell) obj).getPosition());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(position);
     }
 }
