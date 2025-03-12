@@ -2,5 +2,7 @@ package e2;
 
 public interface Knight {
 
-    boolean hit(Pair<Integer, Integer> target);
+    boolean move(Pair<Integer, Integer> target);
+
+    Pair<Integer, Integer> getPosition();
 }

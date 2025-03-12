@@ -21,16 +21,17 @@ public class KnightTest {
 
     @Test
     void testOutOfBoundTarget() {
-        assertThrows(IndexOutOfBoundsException.class, () -> knight.hit(OUT_OF_BOUND_TARGET));
+        assertThrows(IndexOutOfBoundsException.class, () -> knight.move(OUT_OF_BOUND_TARGET));
     }
 
     @Test
-    void testNotReachableAttack() {
-        assertFalse(knight.hit(NOT_REACHABLE_TARGET));
+    void testNotReachableTarget() {
+        assertFalse(knight.move(NOT_REACHABLE_TARGET));
     }
 
     @Test
-    void testReachableAttack() {
-        assertTrue(knight.hit(REACHABLE_TARGET));
+    void testReachableTarget() {
+        assertTrue(knight.move(REACHABLE_TARGET));
+        assertEquals(REACHABLE_TARGET, knight.getPosition());
     }
 }
