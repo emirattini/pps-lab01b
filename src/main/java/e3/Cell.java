@@ -18,11 +18,21 @@ public class Cell {
                 && position.getY() <= cell.getY() + 1;
     }
 
+    public Pair<Integer, Integer> getPosition() {
+        return position;
+    }
+
     public int getX() {
         return position.getX();
     }
 
     public int getY() {
         return position.getY();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Cell
+                && position.equals(((Cell) obj).getPosition());
     }
 }
