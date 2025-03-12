@@ -5,63 +5,39 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class LogicTest {
 
-  public static final int GRID_SIZE = 5;
-  public static final int KNIGHT_JUMP = 3;
-  private Logics logic;
+  private static final int GRID_SIZE = 5;
+  private static final Pair<Integer, Integer> PAWN_POSITION = new Pair<>(0,0);
+  private static final Pair<Integer, Integer> KNIGHT_POSITION = new Pair<>(2, 1);
+
+  private Logics logics;
 
   @BeforeEach
   void setUp() {
-    logic = new LogicsImpl(GRID_SIZE);
-  }
-
-  @Test
-  void testIsKnightPresent() {
-    boolean isKnightPresent = getKnightPosition() != null;
-    assertTrue(isKnightPresent);
+    logics = new LogicsImpl(GRID_SIZE, PAWN_POSITION, KNIGHT_POSITION);
   }
 
   @Test
   void testIsPawnPresent() {
-    boolean isPawnPresent = getPawnPosition() != null;
-    assertTrue(isPawnPresent);
+    assertTrue(logics.hasPawn(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
+  }
+
+  @Test
+  void testIsKnightPresent() {
+    assertTrue(logics.hasKnight(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
   }
 
   @Test
   void testAttackOutOfBound() {
-    assertThrows(IndexOutOfBoundsException.class, () -> logic.hit(GRID_SIZE+1, GRID_SIZE+1));
+    assertThrows(IndexOutOfBoundsException.class, () -> logics.hit(GRID_SIZE+1, GRID_SIZE+1));
   }
 
   @Test
-  void testRightKnightAttack() {
-    var knightPosition = getKnightPosition();
-    var pawnPosition = getPawnPosition();
-    assertNotNull(knightPosition);
-    assertNotNull(pawnPosition);
-    int xDiff = Math.abs(pawnPosition.getX() - knightPosition.getX());
-    int yDiff = Math.abs(pawnPosition.getY() - knightPosition.getY());
-    boolean canAttack = xDiff > 0 && yDiff > 0 && xDiff + yDiff == KNIGHT_JUMP;
-    assertEquals(canAttack, logic.hit(pawnPosition.getX(), pawnPosition.getY()));
+  void testRightAttack() {
+    assertTrue(logics.hit(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
   }
 
-  private Pair<Integer, Integer> getKnightPosition() {
-    for (int i = 0; i < GRID_SIZE; i++) {
-      for (int j = 0; j < GRID_SIZE; j++) {
-        if (logic.hasKnight(i, j)) {
-          return new Pair<>(i, j);
-        }
-      }
-    }
-    return null;
-  }
-
-  private Pair<Integer, Integer> getPawnPosition() {
-    for (int i = 0; i < GRID_SIZE; i++) {
-      for (int j = 0; j < GRID_SIZE; j++) {
-        if (logic.hasPawn(i, j)) {
-          return new Pair<>(i, j);
-        }
-      }
-    }
-    return null;
+  @Test
+  void testNotReachableAttack() {
+    assertFalse(logics.hit(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
   }
 }
