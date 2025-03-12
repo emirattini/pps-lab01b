@@ -28,21 +28,21 @@ public class LogicsImpl implements Logics {
     }
     
 	@Override
-	public boolean hit(int row, int col) {
-		if (row<0 || col<0 || row >= this.size || col >= this.size) {
+	public boolean hit(Pair<Integer, Integer> target) {
+		if (target.getX() >= this.size || target.getY() >= this.size) {
 			throw new IndexOutOfBoundsException();
 		}
 		// Below a compact way to express allowed moves for the knight
-		return knight.move(new Pair<>(row, col)) && hasPawn(row, col);
+		return knight.move(target) && pawn.equals(target);
 	}
 
 	@Override
-	public boolean hasKnight(int row, int col) {
-		return this.knight.getPosition().equals(new Pair<>(row,col));
+	public Pair<Integer, Integer> getKnightPosition() {
+		return knight.getPosition();
 	}
 
 	@Override
-	public boolean hasPawn(int row, int col) {
-		return this.pawn.equals(new Pair<>(row,col));
+	public Pair<Integer, Integer> getPawnPosition() {
+		return pawn;
 	}
 }

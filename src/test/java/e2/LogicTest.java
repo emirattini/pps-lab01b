@@ -8,6 +8,7 @@ public class LogicTest {
   private static final int GRID_SIZE = 5;
   private static final Pair<Integer, Integer> PAWN_POSITION = new Pair<>(0,0);
   private static final Pair<Integer, Integer> KNIGHT_POSITION = new Pair<>(2, 1);
+  private static final Pair<Integer, Integer> OUT_OF_BOUNDS_TARGET = new Pair<>(GRID_SIZE + 1, GRID_SIZE + 1);
 
   private Logics logics;
 
@@ -18,27 +19,27 @@ public class LogicTest {
 
   @Test
   void testIsPawnPresent() {
-    assertTrue(logics.hasPawn(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
+    assertEquals(logics.getPawnPosition(), PAWN_POSITION);
   }
 
   @Test
   void testIsKnightPresent() {
-    assertTrue(logics.hasKnight(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
+    assertEquals(logics.getKnightPosition(), KNIGHT_POSITION);
   }
 
   @Test
   void testAttackOutOfBound() {
-    assertThrows(IndexOutOfBoundsException.class, () -> logics.hit(GRID_SIZE+1, GRID_SIZE+1));
+    assertThrows(IndexOutOfBoundsException.class, () -> logics.hit(OUT_OF_BOUNDS_TARGET));
   }
 
   @Test
   void testNotReachableAttack() {
-    assertFalse(logics.hit(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
+    assertFalse(logics.hit(KNIGHT_POSITION));
   }
 
   @Test
   void testRightAttack() {
-    assertTrue(logics.hit(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
-    assertTrue(logics.hasKnight(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
+    assertTrue(logics.hit(PAWN_POSITION));
+    assertEquals(logics.getKnightPosition(), PAWN_POSITION);
   }
 }
