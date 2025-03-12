@@ -32,12 +32,13 @@ public class LogicTest {
   }
 
   @Test
-  void testRightAttack() {
-    assertTrue(logics.hit(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
+  void testNotReachableAttack() {
+    assertFalse(logics.hit(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
   }
 
   @Test
-  void testNotReachableAttack() {
-    assertFalse(logics.hit(KNIGHT_POSITION.getX(), KNIGHT_POSITION.getY()));
+  void testRightAttack() {
+    assertTrue(logics.hit(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
+    assertTrue(logics.hasKnight(PAWN_POSITION.getX(), PAWN_POSITION.getY()));
   }
 }
