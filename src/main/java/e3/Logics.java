@@ -1,5 +1,7 @@
 package e3;
 
+import e3.grid.Cell;
+
 public interface Logics {
 
     /**

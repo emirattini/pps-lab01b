@@ -1,4 +1,5 @@
-package e3;
+package e3.grid;
+
 import e3.Pair;
 
 import java.util.Objects;

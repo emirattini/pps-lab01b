@@ -1,40 +1,42 @@
 package e3;
 
-import java.util.HashSet;
+import e3.grid.Cell;
+import e3.grid.Grid;
+import e3.grid.GridImpl;
+
 import java.util.Random;
 import java.util.Set;
 
 public class LogicsImpl implements Logics {
 
     private final Random rand = new Random();
-    private final Set<Cell> mines;
+    private final Grid grid;
 
     public LogicsImpl(Set<Cell> mines) {
-        this.mines = mines;
+        grid = new GridImpl(mines.size());
+        mines.forEach(grid::addMine);
     }
 
     public LogicsImpl(int size) {
-        mines = new HashSet<>();
+        grid = new GridImpl(size);
         for (int i = 0; i < size; i++) {
-            mines.add(getNewRandomMine(size));
+            grid.addMine(getNewRandomMine(size));
         }
     }
 
     private Cell getNewRandomMine(int bound) {
         Pair<Integer, Integer> randomPosition = new Pair<>(rand.nextInt(bound), rand.nextInt(bound));
         Cell newMine = new Cell(randomPosition);
-        return !mines.contains(newMine) ? newMine : getNewRandomMine(bound);
+        return !grid.isAMine(newMine) ? newMine : getNewRandomMine(bound);
     }
 
     @Override
     public boolean isAMine(Cell cell) {
-        return mines.contains(cell);
+        return grid.isAMine(cell);
     }
 
     @Override
     public int getAdjacentMines(Cell cell) {
-        return (int) mines.stream()
-                .filter(cell::isAdjacent)
-                .count();
+        return grid.getAdjacentMines(cell);
     }
 }
