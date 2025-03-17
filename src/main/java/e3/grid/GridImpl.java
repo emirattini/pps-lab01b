@@ -8,11 +8,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GridImpl implements Grid {
-
     private final Set<Cell> allCells = new HashSet<>();
     private final Set<Cell> mines = new HashSet<>();
     private final Set<Cell> flags = new HashSet<>();
-    private final Set<Cell> disabled = new HashSet<>();
+    private final Set<Cell> dug = new HashSet<>();
     private final int size;
 
     public GridImpl(int size) {
@@ -49,8 +48,24 @@ public class GridImpl implements Grid {
     }
 
     @Override
+    public void removeFlag(Cell flag) {
+        flags.remove(flag);
+    }
+
+    @Override
     public boolean isFlagged(Cell cell) {
         return flags.contains(cell);
+    }
+
+    @Override
+    public void dig(Cell cell) {
+        checkIfOutOfBound(cell);
+        dug.add(cell);
+    }
+
+    @Override
+    public boolean isDug(Cell cell) {
+        return dug.contains(cell);
     }
 
     @Override
@@ -58,11 +73,6 @@ public class GridImpl implements Grid {
         return (int) mines.stream()
                 .filter(cell::isAdjacent)
                 .count();
-    }
-
-    @Override
-    public void removeFlag(Cell flag) {
-        flags.remove(flag);
     }
 
     @Override
@@ -79,13 +89,9 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public void dig(Cell cell) {
-        checkIfOutOfBound(cell);
-        disabled.add(cell);
-    }
-
-    @Override
-    public boolean isDug(Cell cell) {
-        return disabled.contains(cell);
+    public boolean isItAVictory() {
+        return allCells.stream()
+                .filter(Predicate.not(this::isMined))
+                .allMatch(this::isDug);
     }
 }

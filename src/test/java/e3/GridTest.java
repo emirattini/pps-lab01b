@@ -12,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GridTest {
 
-    private static final int GRID_SIZE = 5;
+    private static final int GRID_SIZE = 2;
     private static final Pair<Integer, Integer> OUT_OF_BOUND = new Pair<>(GRID_SIZE + 1, GRID_SIZE + 1);
-    private static final Pair<Integer, Integer> ON_THE_CORNER = new Pair<>(0, 0);
+    private static final Pair<Integer, Integer> BOTTOM_LEFT = new Pair<>(0, 0);
     private static final Pair<Integer, Integer> MINE_POSITION = new Pair<>(1, 1);
     private static final Pair<Integer, Integer> FLAG_POSITION = new Pair<>(1, 1);
 
@@ -42,7 +42,7 @@ public class GridTest {
     void testGetAdjacentMines() {
         grid.addMine(new Cell(MINE_POSITION));
         int numberOfMines = 1;
-        assertEquals(numberOfMines, grid.getAdjacentMines(new Cell(ON_THE_CORNER)));
+        assertEquals(numberOfMines, grid.getAdjacentMines(new Cell(BOTTOM_LEFT)));
     }
 
     @Test
@@ -81,20 +81,30 @@ public class GridTest {
 
     @Test
     void testDigAndCheck() {
-        grid.dig(new Cell(ON_THE_CORNER));
-        assertTrue(grid.isDug(new Cell(ON_THE_CORNER)));
+        grid.dig(new Cell(BOTTOM_LEFT));
+        assertTrue(grid.isDug(new Cell(BOTTOM_LEFT)));
     }
 
     @Test
     void testGetAdjacentCells() {
-        Cell cell = new Cell(ON_THE_CORNER);
-        Cell adjacentCell1 = new Cell(new Pair<>(ON_THE_CORNER.getX() + 1, ON_THE_CORNER.getY()));
-        Cell adjacentCell2 = new Cell(new Pair<>(ON_THE_CORNER.getX(), ON_THE_CORNER.getY() + 1));
-        Cell adjacentCell3 = new Cell(new Pair<>(ON_THE_CORNER.getX() + 1, ON_THE_CORNER.getY() + 1));
-        Cell notAdjacentCell = new Cell(new Pair<>(ON_THE_CORNER.getX() + 2, ON_THE_CORNER.getY() + 2));
+        Cell cell = new Cell(BOTTOM_LEFT);
+        Cell adjacentCell1 = new Cell(new Pair<>(BOTTOM_LEFT.getX() + 1, BOTTOM_LEFT.getY()));
+        Cell adjacentCell2 = new Cell(new Pair<>(BOTTOM_LEFT.getX(), BOTTOM_LEFT.getY() + 1));
+        Cell adjacentCell3 = new Cell(new Pair<>(BOTTOM_LEFT.getX() + 1, BOTTOM_LEFT.getY() + 1));
+        Cell notAdjacentCell = new Cell(new Pair<>(BOTTOM_LEFT.getX() + 2, BOTTOM_LEFT.getY() + 2));
 
         Set<Cell> adjacentCells = grid.getAdjacentCells(cell);
         assertTrue(adjacentCells.containsAll(Set.of(adjacentCell1, adjacentCell2, adjacentCell3)));
         assertFalse(adjacentCells.contains(notAdjacentCell));
+    }
+
+    @Test
+    void testIsItAVictory() {
+        grid.addMine(new Cell(MINE_POSITION));
+        assertFalse(grid.isItAVictory());
+        grid.dig(new Cell(BOTTOM_LEFT));
+        grid.dig(new Cell(new Pair<>(BOTTOM_LEFT.getX() + 1, BOTTOM_LEFT.getY())));
+        grid.dig(new Cell(new Pair<>(BOTTOM_LEFT.getX(), BOTTOM_LEFT.getY() + 1)));
+        assertTrue(grid.isItAVictory());
     }
 }

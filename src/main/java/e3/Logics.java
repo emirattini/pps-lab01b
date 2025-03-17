@@ -40,4 +40,9 @@ public interface Logics {
      * @return true if the cell is dug, false otherwise
      */
     boolean isDug(Cell cell);
+
+    /**
+     * @return true if it is a victory, false otherwise
+     */
+    boolean isItAVictory();
 }

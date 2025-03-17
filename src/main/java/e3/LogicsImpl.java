@@ -74,4 +74,9 @@ public class LogicsImpl implements Logics {
     public boolean isDug(Cell cell) {
         return grid.isDug(cell);
     }
+
+    @Override
+    public boolean isItAVictory() {
+        return grid.isItAVictory();
+    }
 }

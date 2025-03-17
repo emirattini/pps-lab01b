@@ -58,4 +58,9 @@ public interface Grid {
      * @return a set with all the adjacent cells
      */
     Set<Cell> getAdjacentCells(Cell cell);
+
+    /**
+     * @return true if it is a victory, false otherwise
+     */
+    boolean isItAVictory();
 }

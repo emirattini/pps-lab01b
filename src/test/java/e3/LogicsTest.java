@@ -4,17 +4,19 @@ import e3.grid.Cell;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LogicsTest {
 
-    private static final Pair<Integer, Integer> MINE_POSITION = new Pair<>(1,1);
-    private static final Pair<Integer, Integer> NOT_MINE_POSITION = new Pair<>(0,0);
+    private static final Pair<Integer, Integer> MINE_POSITION = new Pair<>(0,0);
+    private static final Pair<Integer, Integer> NOT_MINE_POSITION = new Pair<>(1,1);
     private static final Pair<Integer, Integer> FLAG_POSITION = new Pair<>(0, 1);
-    private static final Pair<Integer, Integer> NO_MINES_AROUND = new Pair<>(3, 3);
-    private static final int SIZE = 5;
+    private static final Pair<Integer, Integer> NO_MINES_AROUND = new Pair<>(2, 2);
+    private static final int SIZE = 4;
 
     private Logics logics;
 
@@ -77,5 +79,20 @@ public class LogicsTest {
         logics.dig(cellWithNoMinesAround);
         assertTrue(expectedAdjacentDugCells.stream()
                 .allMatch(logics::isDug));
+    }
+
+    @Test
+    void voidIsItAVictory() {
+        assertFalse(logics.isItAVictory());
+        Set<Cell> allCells = new HashSet<>();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                allCells.add(new Cell(new Pair<>(i, j)));
+            }
+        }
+        allCells.stream()
+                .filter(Predicate.not(logics::isMined))
+                .forEach(logics::dig);
+        assertTrue(logics.isItAVictory());
     }
 }
