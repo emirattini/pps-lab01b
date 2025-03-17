@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CellTest {
 
-    public static final Pair<Integer, Integer> OUT_OF_BOUND_POSITION = new Pair<>(-1, -1);
     public static final Pair<Integer, Integer> CELL_POSITION = new Pair<>(0, 0);
+    public static final Pair<Integer, Integer> OUT_OF_BOUND_POSITION = new Pair<>(-1, -1);
     public static final Pair<Integer, Integer> ADJACENT_POSITION = new Pair<>(1, 1);
     public static final Pair<Integer, Integer> NOT_ADJACENT_POSITION = new Pair<>(2, 2);
 
@@ -23,14 +23,14 @@ public class CellTest {
     }
 
     @Test
-    void testNotTwoEqualCellsInTheSameSet() {
+    void testEqualsAndHashing() {
         Cell cell1 = new Cell(CELL_POSITION);
         Cell cell2 = new Cell(CELL_POSITION);
-        HashSet<Cell> mines = new HashSet<>();
-        mines.add(cell1);
-        mines.add(cell2);
+        HashSet<Cell> cells = new HashSet<>();
+        cells.add(cell1);
+        cells.add(cell2);
         int expectedSize = 1;
-        assertEquals(expectedSize, mines.size());
+        assertEquals(expectedSize, cells.size());
     }
 
     @Test

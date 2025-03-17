@@ -1,5 +1,7 @@
 package e3;
 
+import e3.grid.Cell;
+
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.MouseInputListener;
@@ -26,7 +28,7 @@ public class GUI extends JFrame {
         ActionListener onClick = (e)->{
             final JButton bt = (JButton)e.getSource();
             final Pair<Integer,Integer> pos = buttons.get(bt);
-            boolean aMineWasFound = false; // call the logic here to tell it that cell at 'pos' has been seleced
+            boolean aMineWasFound = logics.isMined(new Cell(pos)); // call the logic here to tell it that cell at 'pos' has been seleced
             if (aMineWasFound) {
                 quitGame();
                 JOptionPane.showMessageDialog(this, "You lost!!");
@@ -47,7 +49,7 @@ public class GUI extends JFrame {
                 final JButton bt = (JButton)e.getSource();
                 if (bt.isEnabled()){
                     final Pair<Integer,Integer> pos = buttons.get(bt);
-                    // call the logic here to put/remove a flag
+                    logics.flagClick(new Cell(pos));
                 }
                 drawBoard(); 
             }
@@ -69,14 +71,21 @@ public class GUI extends JFrame {
     private void quitGame() {
         this.drawBoard();
     	for (var entry: this.buttons.entrySet()) {
-            // call the logic here
-            // if this button is a mine, draw it "*"
-            // disable the button
+            if (logics.isMined(new Cell(entry.getValue()))) {
+                JButton button = entry.getKey();
+                button.setText("*");
+                button.setEnabled(false);
+            }
     	}
     }
 
     private void drawBoard() {
         for (var entry: this.buttons.entrySet()) {
+            JButton button = entry.getKey();
+            Cell cell = new Cell(entry.getValue());
+            if (logics.isFlagged(cell)) {
+                button.setText("F");
+            }
             // call the logic here
             // if this button is a cell with counter, put the number
             // if this button has a flag, put the flag

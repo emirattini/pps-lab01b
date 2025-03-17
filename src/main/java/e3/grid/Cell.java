@@ -2,17 +2,12 @@ package e3.grid;
 
 import e3.Pair;
 
-import java.util.Objects;
+public record Cell(Pair<Integer, Integer> position) {
 
-public class Cell {
-
-    private final Pair<Integer, Integer> position;
-
-    public Cell(Pair<Integer, Integer> position) {
+    public Cell {
         if (position.getX() < 0 || position.getY() < 0) {
             throw new IndexOutOfBoundsException();
         }
-        this.position = position;
     }
 
     public boolean isAdjacent(Cell cell) {
@@ -20,10 +15,6 @@ public class Cell {
                 && position.getX() <= cell.getX() + 1
                 && position.getY() >= cell.getY() - 1
                 && position.getY() <= cell.getY() + 1;
-    }
-
-    public Pair<Integer, Integer> getPosition() {
-        return position;
     }
 
     public int getX() {
@@ -37,11 +28,6 @@ public class Cell {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Cell
-                && position.equals(((Cell) obj).getPosition());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(position);
+                && position.equals(((Cell) obj).position());
     }
 }

@@ -1,16 +1,27 @@
 package e3.grid;
 
+import e3.Pair;
+
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class GridImpl implements Grid {
 
+    private final Set<Cell> allCells = new HashSet<>();
     private final Set<Cell> mines = new HashSet<>();
     private final Set<Cell> flags = new HashSet<>();
+    private final Set<Cell> disabled = new HashSet<>();
     private final int size;
 
     public GridImpl(int size) {
         this.size = size;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                allCells.add(new Cell(new Pair<>(i, j)));
+            }
+        }
     }
 
     @Override
@@ -27,7 +38,7 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public boolean isAMine(Cell cell) {
+    public boolean isMined(Cell cell) {
         return mines.contains(cell);
     }
 
@@ -47,5 +58,34 @@ public class GridImpl implements Grid {
         return (int) mines.stream()
                 .filter(cell::isAdjacent)
                 .count();
+    }
+
+    @Override
+    public void removeFlag(Cell flag) {
+        flags.remove(flag);
+    }
+
+    @Override
+    public int getFlaggedNumber() {
+        return flags.size();
+    }
+
+    @Override
+    public Set<Cell> getAdjacentCells(Cell cell) {
+        return allCells.stream()
+                .filter(cell::isAdjacent)
+                .filter(Predicate.not(cell::equals))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void dig(Cell cell) {
+        checkIfOutOfBound(cell);
+        disabled.add(cell);
+    }
+
+    @Override
+    public boolean isDug(Cell cell) {
+        return disabled.contains(cell);
     }
 }
