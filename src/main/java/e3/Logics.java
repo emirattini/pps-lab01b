@@ -5,10 +5,17 @@ import e3.grid.Cell;
 public interface Logics {
 
     /**
-     * @param cell a cell
+     * Returns true if a mine was found, otherwise digs the cell
+     * @param cell the cell to dig
      * @return true if the cell is a mine, false otherwise
      */
-    boolean isMined(Cell cell);
+    boolean dig(Cell cell);
+
+    /**
+     * @param cell the cell to check
+     * @return true if the cell is dug, false otherwise
+     */
+    boolean isDug(Cell cell);
 
     /**
      * @param cell a cell
@@ -29,17 +36,6 @@ public interface Logics {
      * @return true if the cell is flagged, false otherwise
      */
     boolean isFlagged(Cell cell);
-
-    /**
-     * @param cell the cell to dig
-     */
-    void dig(Cell cell);
-
-    /**
-     * @param cell the cell to check
-     * @return true if the cell is dug, false otherwise
-     */
-    boolean isDug(Cell cell);
 
     /**
      * @return true if it is a victory, false otherwise

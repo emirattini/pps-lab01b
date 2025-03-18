@@ -26,13 +26,13 @@ public class LogicsTest {
     }
 
     @Test
-    void testIsMined() {
-        assertTrue(logics.isMined(new Cell(MINE_POSITION)));
+    void testDig() {
+        assertTrue(logics.dig(new Cell(MINE_POSITION)));
     }
 
     @Test
     void testIsNotAMine() {
-        assertFalse(logics.isMined(new Cell(NOT_MINE_POSITION)));
+        assertFalse(logics.dig(new Cell(NOT_MINE_POSITION)));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class LogicsTest {
             }
         }
         allCells.stream()
-                .filter(Predicate.not(logics::isMined))
+                .filter(Predicate.not(logics::dig))
                 .forEach(logics::dig);
         assertTrue(logics.isItAVictory());
     }

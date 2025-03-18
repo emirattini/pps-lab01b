@@ -20,7 +20,8 @@ public class GUI extends JFrame {
     public GUI(int size) {
         this.logics = new LogicsImpl(size);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(100*size, 100*size);
+        int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        this.setSize((width/2), width/2);
         
         JPanel panel = new JPanel(new GridLayout(size,size));
         this.getContentPane().add(BorderLayout.CENTER,panel);
@@ -28,14 +29,15 @@ public class GUI extends JFrame {
         ActionListener onClick = (e)->{
             final JButton bt = (JButton)e.getSource();
             final Pair<Integer,Integer> pos = buttons.get(bt);
-            boolean aMineWasFound = logics.isMined(new Cell(pos)); // call the logic here to tell it that cell at 'pos' has been seleced
+            boolean aMineWasFound = logics.dig(new Cell(pos)); // call the logic here to tell it that cell at 'pos' has been seleced
             if (aMineWasFound) {
                 quitGame();
                 JOptionPane.showMessageDialog(this, "You lost!!");
+                System.exit(0);
             } else {
-                drawBoard();            	
+                drawBoard();
             }
-            boolean isThereVictory = false; // call the logic here to ask if there is victory
+            boolean isThereVictory = logics.isItAVictory(); // call the logic here to ask if there is victory
             if (isThereVictory){
                 quitGame();
                 JOptionPane.showMessageDialog(this, "You won!!");
@@ -71,7 +73,7 @@ public class GUI extends JFrame {
     private void quitGame() {
         this.drawBoard();
     	for (var entry: this.buttons.entrySet()) {
-            if (logics.isMined(new Cell(entry.getValue()))) {
+            if (logics.dig(new Cell(entry.getValue()))) {
                 JButton button = entry.getKey();
                 button.setText("*");
                 button.setEnabled(false);
@@ -83,12 +85,19 @@ public class GUI extends JFrame {
         for (var entry: this.buttons.entrySet()) {
             JButton button = entry.getKey();
             Cell cell = new Cell(entry.getValue());
-            if (logics.isFlagged(cell)) {
-                button.setText("F");
+            if (button.isEnabled()) {
+                if (logics.isDug(cell)) {
+                    button.setEnabled(false);
+                    int adjacentMines = logics.getAdjacentMines(cell);
+                    button.setText(adjacentMines == 0 ? "" : Integer.toString(adjacentMines));
+                }
+                if (logics.isFlagged(cell)) {
+                    button.setText("F");
+                }
+                if (Objects.equals(button.getText(), "F") && !logics.isFlagged(cell)) {
+                    button.setText("");
+                }
             }
-            // call the logic here
-            // if this button is a cell with counter, put the number
-            // if this button has a flag, put the flag
     	}
     }
     

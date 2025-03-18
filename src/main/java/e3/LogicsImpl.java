@@ -36,8 +36,27 @@ public class LogicsImpl implements Logics {
     }
 
     @Override
-    public boolean isMined(Cell cell) {
+    public boolean dig(Cell cell) {
+        if (grid.isMined(cell)) {
+            return true;
+        }
+
+        recursiveDig(cell);
         return grid.isMined(cell);
+    }
+
+    private void recursiveDig(Cell cell) {
+        grid.dig(cell);
+        if (getAdjacentMines(cell) == 0) {
+            grid.getAdjacentCells(cell).stream()
+                    .filter(Predicate.not(grid::isDug))
+                    .forEach(this::recursiveDig);
+        }
+    }
+
+    @Override
+    public boolean isDug(Cell cell) {
+        return grid.isDug(cell);
     }
 
     @Override
@@ -57,22 +76,6 @@ public class LogicsImpl implements Logics {
     @Override
     public boolean isFlagged(Cell cell) {
         return grid.isFlagged(cell);
-    }
-
-    @Override
-    public void dig(Cell cell) {
-        grid.dig(cell);
-        if (getAdjacentMines(cell) == 0) {
-            Set<Cell> adjacentCells = grid.getAdjacentCells(cell);
-            adjacentCells.stream()
-                    .filter(Predicate.not(grid::isDug))
-                    .forEach(this::dig);
-        }
-    }
-
-    @Override
-    public boolean isDug(Cell cell) {
-        return grid.isDug(cell);
     }
 
     @Override
