@@ -11,7 +11,8 @@ public record Cell(Pair<Integer, Integer> position) {
     }
 
     public boolean isAdjacent(Cell cell) {
-        return position.getX() >= cell.getX() - 1
+        return !this.equals(cell)
+                && position.getX() >= cell.getX() - 1
                 && position.getX() <= cell.getX() + 1
                 && position.getY() >= cell.getY() - 1
                 && position.getY() <= cell.getY() + 1;

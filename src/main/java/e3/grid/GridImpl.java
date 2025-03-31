@@ -58,6 +58,11 @@ public class GridImpl implements Grid {
     }
 
     @Override
+    public int getFlaggedNumber() {
+        return flags.size();
+    }
+
+    @Override
     public void dig(Cell cell) {
         checkIfOutOfBound(cell);
         dug.add(cell);
@@ -76,15 +81,9 @@ public class GridImpl implements Grid {
     }
 
     @Override
-    public int getFlaggedNumber() {
-        return flags.size();
-    }
-
-    @Override
     public Set<Cell> getAdjacentCells(Cell cell) {
         return allCells.stream()
                 .filter(cell::isAdjacent)
-                .filter(Predicate.not(cell::equals))
                 .collect(Collectors.toSet());
     }
 
